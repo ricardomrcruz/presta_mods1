@@ -1,0 +1,3 @@
+in tpl files :
+
+- to execute html code add nofilter after the variable data inside the tag like {$message nofilter}

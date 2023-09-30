@@ -30,12 +30,12 @@ class Mymodule extends Module
     {
         $this->_clearCache('*');
 
-        return parent::install() && $this->registerHook('displayLeftColumn');
+        return parent::install() && $this->registerHook('displayLeftColumn') && $this->registerHook('displayHeader');
     }
 
     public function uninstall()
     {
-        return parent::uninstall() && $this->unregisterHook('displayLeftColumn');
+        return parent::uninstall() && $this->unregisterHook('displayLeftColumn') && $this->unregisterHook('displayHeader');
     }
 
     public function postProcess()
@@ -43,7 +43,7 @@ class Mymodule extends Module
             if(Tools::isSubmit('btnSubmitMyModule')){
                 
                 // dump(Tools::getAllValues());
-                Configuration::updateValue('TEST_INPUT', Tools::getValue('TEST_INPUT'));
+                Configuration::updateValue('TEST_INPUT', Tools::getValue('TEST_INPUT'), true);
             }
             return 'no submit';
     }
@@ -53,9 +53,16 @@ class Mymodule extends Module
         return $this->postProcess().$this->renderForm();
     }
 
-    public function hookdisplayLeftColumn()
+    public function hookdisplayHeader(){
+        
+        $this->context->controller->addCSS($this->_path . 'views/css/front.css', 'all');
+    
+    }
+
+    public function hookdisplayLeftColumn() 
     {
-        return 'Coucou';
+        $this->context->smarty->assign('message_mod', Configuration::get('TEST_INPUT'));
+        return $this->fetch($this->templateFile);
     }
 
 
@@ -69,7 +76,8 @@ class Mymodule extends Module
                 ],
                 'input' => [
                     [
-                        'type' => 'text',
+                        'type' => 'textarea',
+                        'autoload_rte' => true,
                         'label' => $this->trans('test input', [], 'Modules.Checkpayment.Admin'),
                         'name' => 'TEST_INPUT',
                         'required' => true,

@@ -47,6 +47,8 @@ class Mymodule extends Module
             }
             return 'no submit';
     }
+
+    // true lets you insert html into the dom bypassing security
     
     public function getContent()
     {
@@ -55,9 +57,16 @@ class Mymodule extends Module
 
     public function hookdisplayHeader(){
         
-        $this->context->controller->addCSS($this->_path . 'views/css/front.css', 'all');
-    
+        if($this->context->controller->php_self == 'category')
+        {
+        
+            $this->context->controller->addCSS($this->_path . 'views/css/front.css', 'all');
+        
+        }
     }
+
+    // you can find the name of the controller (index, category, contact etc.) by inpecting the id of 
+    // the body element of the page you working on
 
     public function hookdisplayLeftColumn() 
     {

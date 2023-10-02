@@ -1,6 +1,6 @@
 
 
-<div class="block-categories">
+<div class="block-categories" id="blockcustommodule">
     {$message_mod nofilter}
 </div>
 

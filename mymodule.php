@@ -1,7 +1,10 @@
 <?php
 
+use PrestaShop\PrestaShop\Core\Module\WidgetInterface;
 
-class Mymodule extends Module
+
+
+class Mymodule extends Module implements WidgetInterface
 {
 
     public function __construct()
@@ -68,11 +71,20 @@ class Mymodule extends Module
     // you can find the name of the controller (index, category, contact etc.) by inpecting the id of 
     // the body element of the page you working on
 
-    public function hookdisplayLeftColumn() 
-    {
-        $this->context->smarty->assign('message_mod', Configuration::get('TEST_INPUT'));
-        return $this->fetch($this->templateFile);
-    }
+
+                                    //   HOOK
+// --------------------------------------------------------------------
+    // public function hookdisplayLeftColumn() 
+    // {
+    //     $this->context->smarty->assign('message_mod', Configuration::get('TEST_INPUT'));
+    //     return $this->fetch($this->templateFile);
+    // }
+// ------------------------------------------------------------------
+
+
+
+
+    // this hook is commented due to implementing the widgetinterface which opens the possibility to get all the hooks from the backoffice
 
 
     public function renderForm()
@@ -125,6 +137,31 @@ class Mymodule extends Module
         return [
             'TEST_INPUT' => Tools::getValue('TEST_INPUT', Configuration::get('TEST_INPUT')),
             
+        ];
+    }
+
+    
+
+/**
+     * {@inheritdoc}
+     */
+    public function renderWidget($hookName, array $configuration)
+    {
+        $this->smarty->assign($this->getWidgetVariables($hookName, $configuration));
+
+        return $this->fetch(
+            $this->templateFile
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getWidgetVariables($hookName, array $configuration)
+    {
+        
+        return [
+            'message_mod' => Configuration::get('TEST_INPUT')
         ];
     }
 }

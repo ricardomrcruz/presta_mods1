@@ -55,6 +55,9 @@ class Mymodule extends Module implements WidgetInterface
     
     public function getContent()
     {
+
+        $this->registerHook('displayCustom');
+
         return $this->postProcess().$this->renderForm();
     }
 
@@ -66,6 +69,11 @@ class Mymodule extends Module implements WidgetInterface
             $this->context->controller->addCSS($this->_path . 'views/css/front.css', 'all');
         
         }
+    }
+
+    public function hookdisplayCustom(){
+
+        return "display test";
     }
 
     // you can find the name of the controller (index, category, contact etc.) by inpecting the id of 
